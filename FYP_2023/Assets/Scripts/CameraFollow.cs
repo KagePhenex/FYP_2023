@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public float smoothness = 0.5f;
+    [SerializeField] private float smoothness = 0.5f;
 
     private GameObject player;
     private Vector3 velocity;
