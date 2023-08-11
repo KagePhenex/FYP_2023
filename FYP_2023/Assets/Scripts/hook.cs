@@ -8,10 +8,10 @@ public class hook : MonoBehaviour
     public string[] tagsToCheck;
     //Force applied to nova bomb upon spawn
     public float speed, returnSpeed;
+    public Transform caster, collidedWith;
 
     //Private variables
     [HideInInspector]
-    public Transform caster, collidedWith;
     private LineRenderer line;
     private bool hasCollided;
 
@@ -32,30 +32,38 @@ public class hook : MonoBehaviour
                 transform.LookAt(caster);
             }
 
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
-            if (collidedWith) { collidedWith.transform.position = transform.position; }
+            transform.Translate(Vector2.right * speed * Time.deltaTime);
+
+            if (collidedWith) 
+            { 
+                collidedWith.transform.position = transform.position; 
+            }
         }
-        else { Destroy(gameObject); }
+        else 
+        { 
+            Destroy(gameObject); 
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay2D(Collider2D collider)
     {
         //Here add as many checks as you want for your nova bomb's collision
-        if (!hasCollided && tagsToCheck.Contains(other.gameObject.tag))
+        if (!hasCollided && tagsToCheck.Contains(collider.gameObject.tag))
         {
-            Collision(other.transform);
+            Collision(collider);
         }
     }
 
-    void Collision(Transform col)
+    void Collision(Collider2D col)
     {
         speed = returnSpeed;
         //Stop movement
         hasCollided = true;
         if (col)
         {
-            transform.position = col.position;
-            collidedWith = col;
+            col.isTrigger = true;
+            transform.position = col.transform.position;
+            collidedWith = col.transform;
         }
     }
 }

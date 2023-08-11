@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5628215462667207727}
   - component: {fileID: -3297026506282319167}
   - component: {fileID: -546873699425141273}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: DebrisPanel
   m_TagString: DebrisL
   m_Icon: {fileID: 0}

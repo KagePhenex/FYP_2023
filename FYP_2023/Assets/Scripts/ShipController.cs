@@ -84,7 +84,6 @@ public class ShipController : MonoBehaviour
         }
         else if (equipmentArr[1].activeSelf)
         {
-            Debug.Log("Firing");
             var hook = Instantiate(harpoonSpear, mousePos, anchor.transform.rotation);
             hook.GetComponent<hook>().caster = anchor.transform;
         }
