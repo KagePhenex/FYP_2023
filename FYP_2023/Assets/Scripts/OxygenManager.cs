@@ -22,7 +22,7 @@ public class OxygenManager : MonoBehaviour
         {
             duration -= Time.deltaTime;
             slider.value = duration;
-            timerTxt.text = Mathf.CeilToInt(duration % 60).ToString();
+            timerTxt.text = Mathf.Ceil(duration).ToString();
         }
         else
         {

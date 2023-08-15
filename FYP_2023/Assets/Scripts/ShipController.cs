@@ -7,25 +7,24 @@ public class ShipController : MonoBehaviour
 {
     public int health;
 
-    [SerializeField] private GameObject[] equipmentArr;
-    [SerializeField] private ParticleSystem[] flameArr;
+    [SerializeField] private GameObject[] equipmentArr; //Equipment Array
+    [SerializeField] private ParticleSystem[] flameArr; //Thruster Flame Particle Array
 
-    [SerializeField] private float thrustForce;
-    [SerializeField] private float maxHeat;
-    [SerializeField] private float heatRate;
-    [SerializeField] private float waitForSec;
-    [SerializeField] private float cooldownRate;
+    [SerializeField] private float thrustForce; //Thruster Force
+    [SerializeField] private float maxHeat, heatRate; //Overheat
+    [SerializeField] private float waitForSec, cooldownRate; //Cooldown
+    [SerializeField] private float releaseForce; //Force applied when releasing debris (harpoon)
 
-    [SerializeField] private GameObject anchor;
-    [SerializeField] private GameObject ionEffect;
-    [SerializeField] private GameObject harpoonSpear;
+    [SerializeField] private GameObject lineStart, anchor, harpoon; //Space Harpoon
+    [SerializeField] private GameObject ionEffect; //Ion Wave Gun
 
     private PlayerInput playerInput;
     private float heat = 0f; //Thruster heat
     private float timer = 0f;
     private Vector2 moveVec2;
     private Rigidbody2D rb;
-    
+    private GameObject childDebris;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,6 +34,7 @@ public class ShipController : MonoBehaviour
         HealthManager.instance.setMaxHealth(health);
 
         equipmentArr[0].SetActive(true);
+        equipmentArr[1].SetActive(false);
     }
 
     private void FixedUpdate()
@@ -69,26 +69,65 @@ public class ShipController : MonoBehaviour
 
     private void OnFire()
     {
-        Camera cam = Camera.main;
-        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        //Check if 1st equipment is active
         if (equipmentArr[0].activeSelf)
         {
-            if (ionEffect.activeSelf)
-            {
-                ionEffect.SetActive(false);
-            }
-            else
-            {
-                ionEffect.SetActive(true);
-            }
+            fireIon();
         }
-        else if (equipmentArr[1].activeSelf)
+        //Check if 2nd equipment is active and if there are no other harpoons in game
+        else if (equipmentArr[1].activeSelf && GameObject.FindGameObjectsWithTag("Harpoon").Length == 0) 
         {
-            var hook = Instantiate(harpoonSpear, mousePos, anchor.transform.rotation);
-            hook.GetComponent<hook>().caster = anchor.transform;
+            fireHarpoon();
         }
     }
 
+    private bool harpoonedDebris()
+    {
+        bool _containDebris = false;
+        foreach (Transform i in equipmentArr[1].transform)
+        {
+            if (i.gameObject.tag == "DebrisL" || i.gameObject.tag == "DebrisS")
+            {
+                childDebris = i.gameObject;
+                _containDebris = true;
+            }
+        }
+        return _containDebris;
+    }
+    private void fireIon()
+    {
+        if (ionEffect.activeSelf)
+        {
+            ionEffect.SetActive(false);
+        }
+        else
+        {
+            ionEffect.SetActive(true);
+        }
+    }
+    private void fireHarpoon()
+    {
+        if (!harpoonedDebris())
+        {
+            var _harpoon = Instantiate(harpoon, lineStart.transform.position, anchor.transform.rotation);
+            _harpoon.GetComponent<HarpoonBehaviour>().caster = lineStart.transform;
+            _harpoon.GetComponent<HarpoonBehaviour>().anchor = anchor.transform;
+            _harpoon.GetComponent<HarpoonBehaviour>().playerInput = playerInput;
+        }
+        else //Release debris
+        {
+            
+
+            childDebris.GetComponent<Rigidbody2D>().isKinematic = false;
+
+            Vector2 ionPos = transform.position;
+            //Push object away from player
+            childDebris.GetComponent<Rigidbody2D>().AddForce((childDebris.transform.position - lineStart.transform.position) * releaseForce, ForceMode2D.Impulse);
+
+            childDebris.GetComponent<Collider2D>().isTrigger = false;
+            childDebris.transform.parent = null;
+        }
+    }
     private void cooldown()
     {
         if (heat > 0f)
@@ -123,7 +162,7 @@ public class ShipController : MonoBehaviour
 
     private void equipmentSwap()
     {
-        if (Input.GetKey("1"))
+        if (Input.GetKey("1") && !harpoonedDebris())
         {
             equipmentArr[0].SetActive(true);
             equipmentArr[1].SetActive(false);

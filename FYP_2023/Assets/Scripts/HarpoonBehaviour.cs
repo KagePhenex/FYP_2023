@@ -1,36 +1,89 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using UnityEngine.InputSystem;
 
 public class HarpoonBehaviour : MonoBehaviour
 {
-    [SerializeField] private LayerMask layerMask;
-    private LineRenderer lineRenderer;
-    private Camera cam;
+    public Transform caster, anchor;
+    public PlayerInput playerInput;
+    public bool debrisCollected;
 
-    // Start is called before the first frame update
-    void Awake()
+    [SerializeField] private string[] tagsToCheck;
+    [SerializeField] private float speed; //Speed of cable
+    [SerializeField] private float range, stopRange; //Cable range and despawn range
+
+    private Transform collidedWith;
+    private LineRenderer cable;
+    private bool hasCollided;
+    private Vector3 anchorVec;
+
+    private void Start()
     {
-        cam = Camera.main;
-        lineRenderer = gameObject.GetComponent<LineRenderer>();
+        cable = transform.Find("Cable").GetComponent<LineRenderer>();
+        anchorVec = anchor.right;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        cable.SetPosition(0, caster.position);
+        cable.SetPosition(1, transform.position);
 
-        if(lineRenderer.positionCount > 0)
+        //Check if we have impacted
+        if (hasCollided)
         {
-            lineRenderer.SetPosition(1, transform.position);
-            lineRenderer.SetPosition(0, mousePos);
+            //Rotate harpoon head
+            Vector3 posDiff = caster.position - transform.position;
+            float casterRot = Mathf.Atan2(posDiff.y, posDiff.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, casterRot);
+
+            //Destroy harpoon when it gets too close
+            var dist = Vector2.Distance(transform.position, caster.position);
+            if (dist < stopRange)
+            {
+                Destroy(gameObject);
+            }
         }
-
-        if (Input.GetKey(KeyCode.Mouse0))
+        else
         {
-            var raycast = Physics2D.Raycast(cam.transform.position, mousePos, Mathf.Infinity, layerMask);
-            lineRenderer.positionCount = 2;
-            //Debug.Log(raycast.transform.tag);
+            var dist = Vector2.Distance(transform.position, caster.position);
+            if (dist > range)
+            {
+                Collision(null);
+            }
+        }
+        //transform.Translate(anchorVec * speed * Time.deltaTime); //Move harpoon
+        transform.Translate(Vector2.right * speed * Time.deltaTime);
+        if (collidedWith) 
+        { 
+            collidedWith.transform.position = transform.position;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collider)
+    {
+        //If harpoon has not collided and collides with large or small debris
+        if (!hasCollided && tagsToCheck.Contains(collider.gameObject.tag))
+        {
+            Collision(collider);
+        }
+    }
+
+    void Collision(Collider2D col)
+    {
+        //speed = -speed; //Reverse harpoon speed to return harpoon
+        hasCollided = true;
+        //If a debris is hit, harpoon positions becomes debris position
+        if (col)
+        {
+            col.isTrigger = true;
+            col.GetComponent<Rigidbody2D>().isKinematic = true;
+            col.transform.rotation = new Quaternion(0, 0, 0, 0);
+            col.transform.parent = caster.transform.parent.transform;
+            transform.position = col.transform.position;
+            collidedWith = col.transform;
+            debrisCollected = true;
         }
     }
 }

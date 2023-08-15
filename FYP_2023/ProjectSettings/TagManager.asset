@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DebrisL
   - DebrisS
+  - Harpoon
   layers:
   - Default
   - TransparentFX
