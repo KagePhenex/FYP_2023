@@ -164,7 +164,7 @@ TextureImporter:
         serializedVersion: 2
         x: 24
         y: 84
-        width: 5
+        width: 16
         height: 24
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -175,27 +175,6 @@ TextureImporter:
       bones: []
       spriteID: ed0b7df5841dc41478e303060e962f7e
       internalID: 1230976541
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UI_Buttons_3
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 84
-        width: 5
-        height: 24
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6fa1cce14edfd954b96a2e88bec36405
-      internalID: 1412074462
       vertices: []
       indices: 
       edges: []
