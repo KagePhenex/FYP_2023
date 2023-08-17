@@ -22479,9 +22479,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a3f3bac81cb9f4eaab3d8bf3da3070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debris1: {fileID: 189805068601307844, guid: 600d248aaa763b94b8b68eec826b30f6, type: 3}
-  debris2: {fileID: 336565055900791625, guid: 98313348ba68d9e429f5ef5d110f35a3, type: 3}
-  numToSpawn: 10
+  debris:
+  - {fileID: 189805068601307844, guid: 600d248aaa763b94b8b68eec826b30f6, type: 3}
+  - {fileID: 336565055900791625, guid: 98313348ba68d9e429f5ef5d110f35a3, type: 3}
+  numToSpawn: 12
   chanceToSpawn: 70
 --- !u!4 &209745669
 Transform:
@@ -29154,7 +29155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 925280859}
   timerTxt: {fileID: 1120442738}
-  duration: 15
+  duration: 100
 --- !u!114 &925280859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41535,7 +41536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1989168198
 Transform:
   m_ObjectHideFlags: 0

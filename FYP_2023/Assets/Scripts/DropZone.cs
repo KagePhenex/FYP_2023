@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class DropZone : MonoBehaviour
 {
-    [SerializeField] private int LargeDebrisPoints;
-    [SerializeField] private int SmallDebrisPoints;
-    [SerializeField] private int gravityStrength;
-    [SerializeField] private float secToWait;
+    [SerializeField] private int LargeDebrisPoints, SmallDebrisPoints; //Points
+    [SerializeField] private int gravityStrength; //Strength of gravity
+    [SerializeField] private float secToWait; //Seconds to wait before destroying object
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GameObject otherObj = collision.gameObject;
