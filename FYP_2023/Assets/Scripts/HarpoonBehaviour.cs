@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public class HarpoonBehaviour : MonoBehaviour
 {
     public Transform caster, anchor;
-    public PlayerInput playerInput;
     public bool debrisCollected;
 
     [SerializeField] private string[] tagsToCheck;
@@ -17,12 +16,10 @@ public class HarpoonBehaviour : MonoBehaviour
     private Transform collidedWith;
     private LineRenderer cable;
     private bool hasCollided;
-    private Vector3 anchorVec;
 
     private void Start()
     {
         cable = transform.Find("Cable").GetComponent<LineRenderer>();
-        anchorVec = anchor.right;
     }
 
     private void Update()
@@ -53,7 +50,7 @@ public class HarpoonBehaviour : MonoBehaviour
                 Collision(null);
             }
         }
-        //transform.Translate(anchorVec * speed * Time.deltaTime); //Move harpoon
+
         transform.Translate(Vector2.right * speed * Time.deltaTime);
         if (collidedWith) 
         { 

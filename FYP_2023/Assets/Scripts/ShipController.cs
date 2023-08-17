@@ -111,16 +111,11 @@ public class ShipController : MonoBehaviour
         {
             var _harpoon = Instantiate(harpoon, lineStart.transform.position, anchor.transform.rotation);
             _harpoon.GetComponent<HarpoonBehaviour>().caster = lineStart.transform;
-            _harpoon.GetComponent<HarpoonBehaviour>().anchor = anchor.transform;
-            _harpoon.GetComponent<HarpoonBehaviour>().playerInput = playerInput;
         }
         else //Release debris
         {
-            
-
             childDebris.GetComponent<Rigidbody2D>().isKinematic = false;
 
-            Vector2 ionPos = transform.position;
             //Push object away from player
             childDebris.GetComponent<Rigidbody2D>().AddForce((childDebris.transform.position - lineStart.transform.position) * releaseForce, ForceMode2D.Impulse);
 
