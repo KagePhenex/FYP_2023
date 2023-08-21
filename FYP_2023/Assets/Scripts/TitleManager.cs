@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TitleManager: MonoBehaviour
 {
+    [SerializeField] private GameObject tutorialCanvas;
     public void StartGame(string name)
     {
         SceneManager.LoadScene(name);
@@ -12,6 +13,6 @@ public class TitleManager: MonoBehaviour
 
     public void DisplayTutorial()
     {
-        return;
+        tutorialCanvas.SetActive(true);
     }
 }

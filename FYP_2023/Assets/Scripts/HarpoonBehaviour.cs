@@ -74,10 +74,11 @@ public class HarpoonBehaviour : MonoBehaviour
         //If a debris is hit, harpoon positions becomes debris position
         if (col)
         {
+            SFXManager.instance.playHarpoonHit();
             col.isTrigger = true;
             col.GetComponent<Rigidbody2D>().isKinematic = true;
-            col.transform.rotation = new Quaternion(0, 0, 0, 0);
-            col.transform.parent = caster.transform.parent.transform;
+            col.transform.parent = caster.transform.parent.transform; //Parent Debris to Harpoon Gun
+
             transform.position = col.transform.position;
             collidedWith = col.transform;
             debrisCollected = true;

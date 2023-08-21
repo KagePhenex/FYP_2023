@@ -36,15 +36,18 @@ public class ShipController : MonoBehaviour
         equipmentArr[0].SetActive(true);
         equipmentArr[1].SetActive(false);
     }
-
+    private void Update()
+    {
+        equipmentSwap();
+    }
     private void FixedUpdate()
     {
         if (heat < maxHeat)
         {
             rb.AddForce(moveVec2 * thrustForce);
-            playFlameParticles();
-            equipmentSwap();
 
+            playFlameParticles();
+            
             if (moveVec2 != Vector2.zero)
             {
                 heat += heatRate * Time.deltaTime;
@@ -65,6 +68,7 @@ public class ShipController : MonoBehaviour
     private void OnMove(InputValue value)
     {
         moveVec2 = value.Get<Vector2>();
+        SFXManager.instance.playThrusters();
     }
 
     private void OnFire()
@@ -98,10 +102,12 @@ public class ShipController : MonoBehaviour
     {
         if (ionEffect.activeSelf)
         {
+            SFXManager.instance.playIonWave(false);
             ionEffect.SetActive(false);
         }
         else
         {
+            SFXManager.instance.playIonWave(true);
             ionEffect.SetActive(true);
         }
     }
@@ -117,7 +123,8 @@ public class ShipController : MonoBehaviour
             childDebris.GetComponent<Rigidbody2D>().isKinematic = false;
 
             //Push object away from player
-            childDebris.GetComponent<Rigidbody2D>().AddForce((childDebris.transform.position - lineStart.transform.position) * releaseForce, ForceMode2D.Impulse);
+            Vector2 diff = childDebris.transform.position - lineStart.transform.position;
+            childDebris.GetComponent<Rigidbody2D>().AddForce(diff * releaseForce, ForceMode2D.Impulse);
 
             childDebris.GetComponent<Collider2D>().isTrigger = false;
             childDebris.transform.parent = null;
@@ -136,20 +143,23 @@ public class ShipController : MonoBehaviour
         ionEffect.SetActive(false);
         OverheatManager.instance.displayOverheatTxt(true);
         playerInput.currentActionMap.Disable();
+        //Stop all flame effects
         foreach (ParticleSystem flame in flameArr)
         {
             flame.Stop();
         }
-
+        //Start countdown timer
         if (timer < waitForSec)
         {
             timer += 1 * Time.deltaTime;
         }
         else
         {
+            //Reset head and timer
             heat = 0f;
             timer = 0f;
 
+            //Enable objects
             playerInput.currentActionMap.Enable();
             OverheatManager.instance.displayOverheatTxt(false);
         }
@@ -157,14 +167,16 @@ public class ShipController : MonoBehaviour
 
     private void equipmentSwap()
     {
-        if (Input.GetKey("1") && !harpoonedDebris())
+        if (Input.GetKeyDown("1") && !harpoonedDebris())
         {
+            SFXManager.instance.playSwap();
             equipmentArr[0].SetActive(true);
             equipmentArr[1].SetActive(false);
             EquipmentUIManager.instance.setEquipmentUI("1");
         }
-        else if(Input.GetKey("2"))
+        if(Input.GetKeyDown("2"))
         {
+            SFXManager.instance.playSwap();
             equipmentArr[1].SetActive(true);
             equipmentArr[0].SetActive(false);
             EquipmentUIManager.instance.setEquipmentUI("2");
@@ -216,6 +228,7 @@ public class ShipController : MonoBehaviour
         {
             health -= 1;
             HealthManager.instance.updateHealth(health);
+            SFXManager.instance.playDamaged();
         }
     }
 }

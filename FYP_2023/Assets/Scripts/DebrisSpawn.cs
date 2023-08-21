@@ -5,7 +5,7 @@ using UnityEngine;
 public class DebrisSpawn : MonoBehaviour
 {
     [SerializeField] private GameObject[] debris;
-    [SerializeField] private float numToSpawn, chanceToSpawn; //Number and Chance to spawn
+    [SerializeField] private float numToSpawn, chanceToSpawn, avoidSpawn; //Number and Chance to spawn, and distance to avoid spawn
 
     void Start()
     {
@@ -15,7 +15,7 @@ public class DebrisSpawn : MonoBehaviour
             Vector2 randomRange = new Vector2(Random.Range(-10f, 10f), Random.Range(-5f, 8f));
             int randomChance = Random.Range(0, 100);
 
-            if (Vector2.Distance(new Vector2(0, 0), randomRange) > 0.2f)
+            if (Vector2.Distance(new Vector2(0, 0), randomRange) > avoidSpawn)
             {
                 if (randomChance < chanceToSpawn)
                 {
