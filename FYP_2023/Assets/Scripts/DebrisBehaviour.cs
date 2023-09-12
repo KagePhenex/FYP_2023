@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class DebrisBehaviour : MonoBehaviour
 {
-    private float randRotation;
-    // Start is called before the first frame update
-    void Awake()
+    private float randRotation; //Random rotation
+    private void Awake()
     {
         randRotation = Random.Range(-30, 30);
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        transform.Rotate(0, 0, randRotation * Time.deltaTime);
+        transform.Rotate(0, 0, randRotation * Time.deltaTime); //Add rotation to debris
     }
 }

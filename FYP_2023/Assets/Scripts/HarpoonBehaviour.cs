@@ -6,16 +6,16 @@ using UnityEngine.InputSystem;
 
 public class HarpoonBehaviour : MonoBehaviour
 {
-    public Transform caster, anchor;
-    public bool debrisCollected;
+    public Transform caster; //Transform where cable starts
+    public bool debrisCollected; //Check if any debris is collected
 
-    [SerializeField] private string[] tagsToCheck;
+    [SerializeField] private string[] tagsToCheck; //Tags to check
     [SerializeField] private float speed; //Speed of cable
     [SerializeField] private float range, stopRange; //Cable range and despawn range
 
-    private Transform collidedWith;
-    private LineRenderer cable;
-    private bool hasCollided;
+    private Transform collidedWith; //Collided object
+    private LineRenderer cable; //Cable line
+    private bool hasCollided; //Check if collided
 
     private void Start()
     {
@@ -24,10 +24,11 @@ public class HarpoonBehaviour : MonoBehaviour
 
     private void Update()
     {
+        //Set cable start and end points
         cable.SetPosition(0, caster.position);
         cable.SetPosition(1, transform.position);
 
-        //Check if we have impacted
+        //Check if impacted
         if (hasCollided)
         {
             //Rotate harpoon head
@@ -35,7 +36,7 @@ public class HarpoonBehaviour : MonoBehaviour
             float casterRot = Mathf.Atan2(posDiff.y, posDiff.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, casterRot);
 
-            //Destroy harpoon when it gets too close
+            //Destroy harpoon when it gets too close to 
             var dist = Vector2.Distance(transform.position, caster.position);
             if (dist < stopRange)
             {
@@ -44,6 +45,7 @@ public class HarpoonBehaviour : MonoBehaviour
         }
         else
         {
+            //Return harpoon if out of range
             var dist = Vector2.Distance(transform.position, caster.position);
             if (dist > range)
             {
@@ -51,7 +53,8 @@ public class HarpoonBehaviour : MonoBehaviour
             }
         }
 
-        transform.Translate(Vector2.right * speed * Time.deltaTime);
+        transform.Translate(Vector2.right * speed * Time.deltaTime); //Move harpoon
+        //If collided with a debris, set debris position to harpoon position (returns to ship with the harpoon)
         if (collidedWith) 
         { 
             collidedWith.transform.position = transform.position;
@@ -75,8 +78,8 @@ public class HarpoonBehaviour : MonoBehaviour
         if (col)
         {
             SFXManager.instance.playHarpoonHit();
-            col.isTrigger = true;
-            col.GetComponent<Rigidbody2D>().isKinematic = true;
+            col.isTrigger = true; //Debris collider set to trigger 
+            col.GetComponent<Rigidbody2D>().isKinematic = true; //Debris now moves with ship
             col.transform.parent = caster.transform.parent.transform; //Parent Debris to Harpoon Gun
 
             transform.position = col.transform.position;

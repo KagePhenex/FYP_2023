@@ -6,8 +6,8 @@ public class SFXManager : MonoBehaviour
 {
     public static SFXManager instance { get; private set; }
 
-    [SerializeField] private AudioClip damaged, thrusters, ionWave, harpoonHit, equipSwap, gameOver;
-    private AudioSource audioSrc;
+    [SerializeField] private AudioClip damaged, thrusters, ionWave, harpoonHit, equipSwap, gameOver; //Audio clips
+    private AudioSource audioSrc; //Audio Source
 
     private void Awake()
     {
@@ -17,44 +17,37 @@ public class SFXManager : MonoBehaviour
         }
         audioSrc = GetComponent<AudioSource>();
     }
-
-    public void playDamaged()
+    public void playDamaged() //When damaged by debris
     {
         audioSrc.PlayOneShot(damaged);
     }
-
-    public void playThrusters()
+    public void playThrusters() //Thruster flame sfx
     {
         audioSrc.PlayOneShot(thrusters);
     }
-/*    public void playIonWave()
+    public void playIonWave(bool isOn) //Ion energy sound
     {
         audioSrc.loop = true;
         audioSrc.clip = ionWave;
-        audioSrc.Play();
-    }*/
-    public void playIonWave(bool isOn)
-    {
-        audioSrc.loop = true;
-        audioSrc.clip = ionWave;
+        //If ion wave is on, play the clip
         if (isOn)
         {
             audioSrc.Play();
         }
-        else
+        else //Else stop playing clip
         {
             audioSrc.Stop();
         }
     }
-    public void playHarpoonHit()
+    public void playHarpoonHit() //Harpoon hits a debris
     {
         audioSrc.PlayOneShot(harpoonHit);
     }
-    public void playSwap()
+    public void playSwap() //Swap equipment
     {
         audioSrc.PlayOneShot(equipSwap);
     }
-    public void playGameOver()
+    public void playGameOver() //Game Over music
     {
         audioSrc.PlayOneShot(gameOver);
     }

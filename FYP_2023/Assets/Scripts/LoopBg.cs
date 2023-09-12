@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LoopBg : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float speed; //Background move speed
 
     void Update()
     {

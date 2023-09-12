@@ -10,11 +10,13 @@ public class PointZone : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GameObject otherObj = collision.gameObject;
+        //If debrisL, destroy object and update score
         if (otherObj.CompareTag("DebrisL"))
         {
             StartCoroutine(destroyObjectCoroutine(otherObj));
             ScoreManager.instance.UpdateScore(LargeDebrisPoints);
         }
+        //If debrisS, destroy object and update score
         if (otherObj.CompareTag("DebrisS"))
         {
             StartCoroutine(destroyObjectCoroutine(otherObj));

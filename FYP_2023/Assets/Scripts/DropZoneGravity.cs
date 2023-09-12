@@ -10,18 +10,20 @@ public class DropZoneGravity : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        //Earth's gravity pulling down object
+        //Earth's gravity pull
         other.attachedRigidbody.AddForce(Vector2.down * gravityStrength);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            //Disable camera follow and player controls
             Camera.main.GetComponent<CameraFollow>().enabled = false;
             player.GetComponent<ShipController>().enabled = false;
-            StartCoroutine(killPlayerCoroutine());
+            StartCoroutine(killPlayerCoroutine()); //Kill player
         }
     }
+    // Kill Player Coroutine
     IEnumerator killPlayerCoroutine()
     {
         yield return new WaitForSeconds(secToWait);

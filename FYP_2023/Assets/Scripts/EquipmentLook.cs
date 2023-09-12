@@ -16,7 +16,7 @@ public class EquipmentLook: MonoBehaviour
     {
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mouseDir = mousePos - transform.position;
-        float angle = Mathf.Atan2(mouseDir.y, mouseDir.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(mouseDir.y, mouseDir.x) * Mathf.Rad2Deg; //Calculate mouse direction in degrees
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward); //Apply rotation to equipment
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IonEffect : MonoBehaviour
 {
-    [SerializeField] private float ionForce = 5f;
+    [SerializeField] private float ionForce = 5f; //Force of ion effect
 
     private void OnTriggerStay2D(Collider2D other)
     {

@@ -8,16 +8,16 @@ public class CameraFollow : MonoBehaviour
 
     private GameObject player;
     private Vector3 velocity, offset;
-    void Start()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         offset = new Vector3(0, 0, -10);
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        Vector3 playerPos = player.transform.position + offset;
-        transform.position = Vector3.SmoothDamp(transform.position, playerPos, ref velocity, smoothness);
+        Vector3 playerPos = player.transform.position + offset; //Offset camera Z pos
+        transform.position = Vector3.SmoothDamp(transform.position, playerPos, ref velocity, smoothness); //Apply dampened follow effect
     }
 }
